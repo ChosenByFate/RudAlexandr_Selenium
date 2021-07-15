@@ -11,54 +11,65 @@ import java.util.concurrent.TimeUnit;
 public class Application {
     public static void main(String[] args) {
         // 1.
-        System.setProperty("webdriver.chrome.driver", "C:\\Selenium\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
         WebDriver driver = new ChromeDriver();
         driver.get("https://avito.ru");
-//        driver.manage().window().fullscreen();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
         // 2.
+        String category = "Оргтехника и расходники";
         Select categories = new Select(driver.findElement(By.id("category")));
-        categories.selectByVisibleText("Оргтехника и расходники");
+        categories.selectByVisibleText(category);
 
         // 3.
-        WebElement search = driver.findElement(By.xpath("//input[@data-marker=\"search-form/suggest\"]"));
+        By by = By.xpath("//input[@data-marker=\"search-form/suggest\"]");
+        WebElement search = driver.findElement(by);
         search.sendKeys("Принтер");
 
         // 4.
-        WebElement sity = driver.findElement(By.xpath("//div[@data-marker=\"search-form/region\"]"));
-        sity.click();
+        by = By.xpath("//div[@data-marker=\"search-form/region\"]");
+        WebElement city = driver.findElement(by);
+        city.click();
 
         // 5.
-        WebElement sityFind = driver.findElement(By.xpath("//input[@placeholder=\"Город, регион или Россия\"]"));
-        sityFind.sendKeys("Владивосток");
+        by = By.xpath("//input[@placeholder=\"Город, регион или Россия\"]");
+        String cityVlad = "Владивосток";
+        WebElement cityFind = driver.findElement(by);
+        cityFind.sendKeys(cityVlad);
 
-        List<WebElement> sitySelect = driver.findElements(By.xpath("//strong"));
-        sitySelect.get(0).click();
+        by = By.xpath("//strong");
+        List<WebElement> citySelect = driver.findElements(by);
+        citySelect.get(0).click();
 
-        WebElement btnFind = driver.findElement(By.xpath("//button[@data-marker=\"popup-location/save-button\"]"));
+        by = By.xpath("//button[@data-marker=\"popup-location/save-button\"]");
+        WebElement btnFind = driver.findElement(by);
         btnFind.click();
 
         // 6.
-        WebElement chkBox = driver.findElement(By.xpath("//label[@data-marker=\"delivery-filter\"]" +
-                "/input[@type=\"checkbox\"]"));
+        by = By.xpath("//label[@data-marker=\"delivery-filter\"]/input[@type=\"checkbox\"]");
+        WebElement chkBox = driver.findElement(by);
+        by = By.xpath("//button[@data-marker=\"search-filters/submit-button\"]");
         if (!chkBox.isSelected() && chkBox.isEnabled()) {
             chkBox.sendKeys(Keys.SPACE);
-            WebElement btnFind2 = driver.findElement(By.xpath("//button[@data-marker=\"search-filters/submit-button\"]"));
+            WebElement btnFind2 = driver.findElement(by);
             btnFind2.click();
         }
 
         // 7.
-        Select price = new Select(driver.findElement(By.cssSelector("[class^=\"sort-select\"]>[class^=\"select-select\"]")));
+        by = By.cssSelector("[class^=\"sort-select\"]>[class^=\"select-select\"]");
+        Select price = new Select(driver.findElement(by));
         price.selectByIndex(2);
 
         // 8.
-        List<WebElement> searchResults = driver.findElements(By.xpath("//div[@data-marker=\"item\"]"));
+        by = By.xpath("//div[@data-marker=\"item\"]");
+        List<WebElement> searchResults = driver.findElements(by);
         for (int i = 0; i < 3; ++i) {
-            WebElement printerName = searchResults.get(i).findElement(By.cssSelector("[data-marker^=\"item-title\"]"));
+            by = By.cssSelector("[data-marker^=\"item-title\"]");
+            WebElement printerName = searchResults.get(i).findElement(by);
             System.out.println("Printer: " + printerName.getText());
-            WebElement printerPrice = searchResults.get(i).findElement(By.cssSelector("[class^=\"price-text-\"]"));
+            by = By.cssSelector("[class^=\"price-text-\"]");
+            WebElement printerPrice = searchResults.get(i).findElement(by);
             System.out.println("Price: " + printerPrice.getText());
         }
 
