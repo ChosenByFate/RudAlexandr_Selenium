@@ -18,12 +18,12 @@ public class Application {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
         // 2.
-        String category = "Оргтехника и расходники";
-        Select categories = new Select(driver.findElement(By.id("category")));
-        categories.selectByVisibleText(category);
+        By by = By.id("category");
+        Select categories = new Select(driver.findElement(by));
+        categories.selectByVisibleText("Оргтехника и расходники");
 
         // 3.
-        By by = By.xpath("//input[@data-marker=\"search-form/suggest\"]");
+        by = By.xpath("//input[@data-marker=\"search-form/suggest\"]");
         WebElement search = driver.findElement(by);
         search.sendKeys("Принтер");
 
@@ -34,9 +34,8 @@ public class Application {
 
         // 5.
         by = By.xpath("//input[@placeholder=\"Город, регион или Россия\"]");
-        String cityVlad = "Владивосток";
         WebElement cityFind = driver.findElement(by);
-        cityFind.sendKeys(cityVlad);
+        cityFind.sendKeys("Владивосток");
 
         by = By.xpath("//strong");
         List<WebElement> citySelect = driver.findElements(by);
